@@ -45,8 +45,8 @@ from dependencies import get_current_user
 from models.exam import Exam
 from models.subject import Subject
 from models.user_subjects import UserSubject
-from schemas.user_subject import CreateUserSubject
 from models.user import User
+from services.scoring import SCORE_TABLES
 
 router = APIRouter()
 
@@ -79,7 +79,6 @@ def create_exam(
     with SessionLocal() as session:
         with session.begin():
 
-            # 1. Проверяем, существует ли предмет
             subject = session.query(Subject).filter(
                 Subject.id == data.subject_id
             ).first()
@@ -90,7 +89,6 @@ def create_exam(
                     detail="Subject not found"
                 )
 
-            # 2. Проверяем, выбран ли предмет пользователем
             user_subject = session.query(UserSubject).filter(
                 UserSubject.user_id == current_user.id,
                 UserSubject.subject_id == data.subject_id,
@@ -103,7 +101,6 @@ def create_exam(
                     detail="You have not selected this subject"
                 )
 
-            # 3. Определяем модель ответов и Pydantic-схему
             answer_config = ANSWER_MODELS.get(subject.name)
 
             if answer_config is None:
@@ -114,7 +111,6 @@ def create_exam(
 
             answer_model, answer_schema = answer_config
 
-            # 4. Проверяем полученные ответы
             try:
                 validated_answers = answer_schema.model_validate(
                     data.answers
@@ -125,28 +121,35 @@ def create_exam(
                     detail=error.errors()
                 )
 
-            # 5. Создаём пробник
+            primary_score = sum(validated_answers.model_dump().values())
+
+            score_table = SCORE_TABLES.get(subject.name)
+
+            if score_table is None:
+                raise ValueError("Не найдена таблица перевода баллов")
+
+            test_score = score_table.get(primary_score)
+
+            if test_score is None:
+                raise ValueError("Недопустимое количество первичных баллов")
+
             exam = Exam(
                 user_id=current_user.id,
                 subject_id=data.subject_id,
-                runtime=data.runtime
+                runtime=data.runtime,
+                primary_score=primary_score,
+                test_score=test_score
             )
 
             session.add(exam)
-
-            # Получаем ID созданного пробника,
-            # не выполняя окончательный COMMIT
             session.flush()
 
-            # 6. Создаём запись с ответами
             answers = answer_model(
                 exam_id=exam.id,
                 **validated_answers.model_dump()
             )
 
             session.add(answers)
-
-            # 7. Получаем ID записи с ответами
             session.flush()
 
             result = {
