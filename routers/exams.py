@@ -70,7 +70,7 @@ ANSWER_MODELS = {
     "Китайский язык": (ChineseAnswer, ChineseAnswerCreate),
 }
 
-@router.getr("/exams")
+@router.get("/exams")
 def get_exams(
         current_user: User = Depends(get_current_user),
 ):
