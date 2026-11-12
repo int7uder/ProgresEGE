@@ -1,0 +1,19 @@
+# Секреты и настройки
+.env
+.env.*
+
+# Виртуальное окружение Python
+.venv/
+venv/
+
+# Временные файлы Python
+__pycache__/
+*.py[cod]
+
+# Файлы IDE
+.idea/
+
+# Локальная база данных SQLite
+data.db
+data.db-shm
+data.db-wal
