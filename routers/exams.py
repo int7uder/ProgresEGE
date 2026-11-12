@@ -70,6 +70,11 @@ ANSWER_MODELS = {
     "Китайский язык": (ChineseAnswer, ChineseAnswerCreate),
 }
 
+@router.getr("/exams")
+def get_exams(
+        current_user: User = Depends(get_current_user),
+):
+    pass
 
 @router.post("/exams")
 def create_exam(
