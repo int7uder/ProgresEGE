@@ -15,5 +15,6 @@ __pycache__/
 
 # Локальная база данных SQLite
 data.db
+db.sqlite
 data.db-shm
 data.db-wal

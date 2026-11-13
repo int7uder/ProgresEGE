@@ -1,0 +1,3 @@
+PyJWT
+pwdlib
+pwdlib[argon2]

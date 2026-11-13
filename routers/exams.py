@@ -74,7 +74,9 @@ ANSWER_MODELS = {
 def get_exams(
         current_user: User = Depends(get_current_user),
 ):
-    pass
+    with SessionLocal() as session:
+        exams = session.query(Exam).filter(Exam.user_id==current_user.id).all()
+        return exams
 
 @router.post("/exams")
 def create_exam(
@@ -163,7 +165,5 @@ def create_exam(
                 "subject": subject.name,
                 "runtime": exam.runtime
             }
-
-        # Здесь автоматически выполняется COMMIT
 
     return result

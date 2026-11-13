@@ -28,9 +28,3 @@ app.include_router(auth_router)
 app.include_router(exams_router)
 app.include_router(users_router)
 app.include_router(subjects_router)
-
-@app.get("/users")
-def get_users():
-    with SessionLocal() as session:
-        users = session.scalars(select(User)).all()
-        return users
