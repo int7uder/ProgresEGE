@@ -1,13 +1,9 @@
 from contextlib import asynccontextmanager
 
-from sqlalchemy import select
-
 from database import create_db_and_tables, SessionLocal
 from subject_registry import create_subjects
 from config import settings
 from fastapi import FastAPI
-
-from models.user import User
 
 
 @asynccontextmanager
