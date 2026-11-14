@@ -16,8 +16,14 @@ def f():
     return {
         "exams": [
             {
-                # "id": exam.id,
-
-            }
+                "id": exam.id,
+                "user_id": exam.user_id,
+                "subject_id": exam.subject_id,
+                "primary_score": exam.primary_score,
+                "test_score": exam.test_score,
+                "created_at": exam.created_at,
+                "runtime": exam.runtime,
+            } for exam in exams
         ]
     }
+print(f())
