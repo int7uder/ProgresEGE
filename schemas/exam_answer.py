@@ -127,8 +127,6 @@ class MathProfileAnswerCreate(BaseModel):
     task_number_20: int = Field(default=0, ge=0, le=4)
 
 
-# МАТЕМАТИКА БАЗОВАЯ
-
 class MathBasicAnswerCreate(BaseModel):
     task_number_1: int = Field(default=0, ge=0, le=1)
     task_number_2: int = Field(default=0, ge=0, le=1)
@@ -152,8 +150,6 @@ class MathBasicAnswerCreate(BaseModel):
     task_number_20: int = Field(default=0, ge=0, le=1)
     task_number_21: int = Field(default=0, ge=0, le=1)
 
-
-# ФИЗИКА
 
 class PhysicsAnswerCreate(BaseModel):
     task_number_1: int = Field(default=0, ge=0, le=1)
@@ -183,8 +179,6 @@ class PhysicsAnswerCreate(BaseModel):
     task_number_25: int = Field(default=0, ge=0, le=3)
     task_number_26: int = Field(default=0, ge=0, le=4)
 
-
-# ХИМИЯ
 
 class ChemistryAnswerCreate(BaseModel):
     task_number_1: int = Field(default=0, ge=0, le=1)
@@ -223,8 +217,6 @@ class ChemistryAnswerCreate(BaseModel):
     task_number_34: int = Field(default=0, ge=0, le=4)
 
 
-# БИОЛОГИЯ
-
 class BiologyAnswerCreate(BaseModel):
     task_number_1: int = Field(default=0, ge=0, le=1)
     task_number_2: int = Field(default=0, ge=0, le=2)
@@ -256,8 +248,6 @@ class BiologyAnswerCreate(BaseModel):
     task_number_28: int = Field(default=0, ge=0, le=3)
 
 
-# ИСТОРИЯ ЕГЭ-2027
-
 class HistoryAnswerCreate(BaseModel):
     task_number_1: int = Field(default=0, ge=0, le=2)
     task_number_2: int = Field(default=0, ge=0, le=1)
@@ -282,8 +272,6 @@ class HistoryAnswerCreate(BaseModel):
     task_number_21: int = Field(default=0, ge=0, le=3)
     task_number_22: int = Field(default=0, ge=0, le=2)
 
-
-# ГЕОГРАФИЯ
 
 class GeographyAnswerCreate(BaseModel):
     task_number_1: int = Field(default=0, ge=0, le=1)
@@ -317,8 +305,6 @@ class GeographyAnswerCreate(BaseModel):
     task_number_29: int = Field(default=0, ge=0, le=3)
 
 
-# ИНФОРМАТИКА
-
 class InformaticsAnswerCreate(BaseModel):
     task_number_1: int = Field(default=0, ge=0, le=1)
     task_number_2: int = Field(default=0, ge=0, le=1)
@@ -349,8 +335,6 @@ class InformaticsAnswerCreate(BaseModel):
     task_number_27: int = Field(default=0, ge=0, le=2)
 
 
-# ЛИТЕРАТУРА
-
 class LiteratureAnswerCreate(BaseModel):
     task_number_1: int = Field(default=0, ge=0, le=1)
     task_number_2: int = Field(default=0, ge=0, le=1)
@@ -365,11 +349,6 @@ class LiteratureAnswerCreate(BaseModel):
     task_number_11: int = Field(default=0, ge=0, le=20)
 
 
-# НЕМЕЦКИЙ, ФРАНЦУЗСКИЙ И ИСПАНСКИЙ
-
-# У этих экзаменов такая же разбалловка, как у английского.
-# Поэтому можно наследовать готовую схему.
-
 class GermanAnswerCreate(EnglishAnswerCreate):
     pass
 
@@ -381,8 +360,6 @@ class FrenchAnswerCreate(EnglishAnswerCreate):
 class SpanishAnswerCreate(EnglishAnswerCreate):
     pass
 
-
-# КИТАЙСКИЙ ЯЗЫК
 
 class ChineseAnswerCreate(BaseModel):
     task_number_1: int = Field(default=0, ge=0, le=6)

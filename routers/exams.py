@@ -55,8 +55,8 @@ ANSWER_MODELS = {
     "Обществознание": (SocietyAnswer, SocietyAnswerCreate),
     "Русский язык": (RussianAnswer, RussianAnswerCreate),
     "Английский язык": (EnglishAnswer, EnglishAnswerCreate),
-    "Математика профильная": (MathProfileAnswer, MathProfileAnswerCreate),
-    "Математика базовая": (MathBasicAnswer, MathBasicAnswerCreate),
+    "Математика (профиль)": (MathProfileAnswer, MathProfileAnswerCreate),
+    "Математика (база)": (MathBasicAnswer, MathBasicAnswerCreate),
     "Физика": (PhysicsAnswer, PhysicsAnswerCreate),
     "Химия": (ChemistryAnswer, ChemistryAnswerCreate),
     "Биология": (BiologyAnswer, BiologyAnswerCreate),
@@ -140,6 +140,13 @@ def create_exam(
             if test_score is None:
                 raise ValueError("Недопустимое количество первичных баллов")
 
+            print("SUBJECT:", subject.name)
+            print("ANSWERS:", validated_answers.model_dump())
+            print("PRIMARY SCORE:", primary_score)
+            print("SCORE TABLE:", score_table)
+            print("TEST SCORE:", test_score)
+
+
             exam = Exam(
                 user_id=current_user.id,
                 subject_id=data.subject_id,
@@ -167,3 +174,22 @@ def create_exam(
             }
 
     return result
+
+
+@router.delete("/exams/{exam_id}")
+def delete_exam(
+        exam_id: int,
+        current_user: User = Depends(get_current_user),
+):
+    with SessionLocal() as session:
+        exam = session.query(Exam).filter(Exam.user_id == current_user.id).filter(Exam.id == exam_id).one_or_none()
+
+        if exam is None:
+            raise HTTPException(status_code=404, detail="Exam not found")
+
+        session.delete(exam)
+        session.commit()
+        return {
+            "message": "Exam deleted successfully",
+            "deleted_id": exam.id,
+        }

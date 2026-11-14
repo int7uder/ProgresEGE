@@ -33,11 +33,11 @@ SUBJECTS = [
         "model": EnglishAnswer,
     },
     {
-        "name": "Профильная математика",
+        "name": "Математика (профиль)",
         "model": MathProfileAnswer,
     },
     {
-        "name": "Базовая математика",
+        "name": "Математика (база)",
         "model": MathBasicAnswer,
     },
     {
