@@ -4,7 +4,8 @@ from database import create_db_and_tables, SessionLocal
 from subject_registry import create_subjects
 from config import settings
 from fastapi import FastAPI
-
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -14,6 +15,11 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title=settings.APP_NAME, lifespan=lifespan)
 
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+@app.get("/")
+def index():
+    return FileResponse("static/index.html")
 
 from routers.exams import router as exams_router
 from routers.users import router as users_router

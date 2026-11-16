@@ -23,7 +23,7 @@ def register_user(user: UserLogReg):
             hashed_password=hashed_password
         ))
         session.commit()
-
+    print(user.name, hashed_password)
     return {"message": "Register Successful"}
 
 
@@ -35,17 +35,20 @@ def login_user(user_data: UserLogReg):
         ).first()
 
         if not user:
+            print("юзера нет")
             raise HTTPException(
                 status_code=401,
                 detail="Incorrect username or password"
             )
 
         if not verify_password(user_data.password, user.hashed_password):
+            print("пароль неверный")
             raise HTTPException(
                 status_code=401,
                 detail="Incorrect username or password"
             )
 
+        print("все хайп")
         return {
             "access_token": create_access_token(user.id),
             "token_type": "bearer"
