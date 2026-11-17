@@ -1,3 +1,6 @@
 PyJWT
 pwdlib
 pwdlib[argon2]
+FastAPI
+SQLAlchemy
+pydantic-settings

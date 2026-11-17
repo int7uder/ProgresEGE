@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from database import SessionLocal
 from dependencies import get_current_user
 from models.subject import Subject
@@ -51,3 +51,20 @@ def create_subject(
             "subject_added": "Subject add successfully",
             "subject": subject.subject_id
         }
+
+@router.patch("/subjects/{subject_id}/activate")
+def update_subject(
+        subject_id: int,
+        current_user: User = Depends(get_current_user),
+):
+    with SessionLocal() as session:
+        selected_subject = session.query(UserSubject).filter(UserSubject.user_id == current_user.id).filter(UserSubject.subject_id == subject_id).first()
+
+        if selected_subject is None:
+            raise HTTPException(
+                status_code=404,
+                detail="User subject not found"
+            )
+
+        selected_subject.is_active = False
+        session.commit()

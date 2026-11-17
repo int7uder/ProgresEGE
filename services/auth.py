@@ -8,7 +8,7 @@ password_hash = PasswordHash.recommended()
 def create_access_token(user_id: int):
     payload = {
         "sub": str(user_id),
-        "exp": datetime.now(timezone.utc) + timedelta(minutes=10),
+        "exp": datetime.now(timezone.utc) + timedelta(minutes=120),
     }
 
     token = jwt.encode(
