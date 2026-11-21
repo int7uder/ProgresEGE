@@ -51,7 +51,20 @@
     'География':['⌖','ГЕ','#eaf3f8'],'Информатика':['⌘','ИН','#eff0ff'],'Литература':['¶','ЛИ','#fcf0f4'],
     'Немецкий язык':['DE','НЕ','#eaf5f4'],'Французский язык':['FR','ФР','#eaf5f4'],'Испанский язык':['ES','ИС','#fff4e8'],'Китайский язык':['中','КИ','#fff1e9']
   };
+  async function activateSubject(subjectId) {
+    const response = await fetch(`/subjects/${subjectId}/deactivate`, {
+        method: "PATCH",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
 
+    if (!response.ok) {
+        throw new Error("Не удалось активировать предмет");
+    }
+
+    return await response.json();
+}
   function escapeHTML(value='') { return String(value).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
   function initials(name='U') { return name.trim().slice(0,1).toUpperCase() || 'U'; }
   function toast(message,type='success') { const node=document.createElement('div');node.className=`toast ${type==='error'?'error':''}`;node.textContent=message;$('#toast-root').append(node);setTimeout(()=>node.remove(),3200); }
@@ -85,6 +98,7 @@
   function renderRecent(){$('#recent-exams').innerHTML=examRows(sortedExams(),5);drawChart();}
   function renderHistory(){const query=($('#history-search')?.value||'').trim().toLowerCase();const exams=sortedExams().filter(e=>subjectName(e.subject_id).toLowerCase().includes(query));$('#history-table').innerHTML=examRows(exams);}
   function drawChart(){const root=$('#chart-container'),arr=[...state.exams].sort((a,b)=>Number(a.id)-Number(b.id)).slice(-10);if(!arr.length){root.innerHTML='<div class="empty-chart"><span class="empty-chart-icon">⌁</span><b>Здесь появится твой прогресс</b><p>Добавь первый пробник, чтобы увидеть динамику баллов.</p></div>';return;}const w=660,h=205,p={l:35,r:18,t:15,b:28},iw=w-p.l-p.r,ih=h-p.t-p.b;const y=v=>p.t+ih-(Math.max(0,Math.min(100,v))/100)*ih;const x=i=>p.l+(arr.length===1?iw/2:(i/(arr.length-1))*iw);const pts=arr.map((e,i)=>[x(i),y(Number(e.test_score)||0)]);const line=pts.map((pt,i)=>(i?'L':'M')+pt[0].toFixed(1)+','+pt[1].toFixed(1)).join(' ');const area=`${line} L ${pts.at(-1)[0]},${h-p.b} L ${pts[0][0]},${h-p.b} Z`;let grid='';[0,25,50,75,100].forEach(v=>{grid+=`<line x1="${p.l}" x2="${w-p.r}" y1="${y(v)}" y2="${y(v)}" stroke="#edf1eb" stroke-dasharray="3 5"/><text x="${p.l-9}" y="${y(v)+3}" fill="#a4afa6" font-size="9" text-anchor="end">${v}</text>`;});let labels='';pts.forEach((pt,i)=>{if(i===0||i===pts.length-1||arr.length<=5)labels+=`<text x="${pt[0]}" y="${h-6}" fill="#9ca89e" font-size="8" text-anchor="middle">#${i+1}</text>`;});const dots=pts.map((pt,i)=>`<circle cx="${pt[0]}" cy="${pt[1]}" r="4" fill="#fff" stroke="#99c95a" stroke-width="2"><title>${escapeHTML(subjectName(arr[i].subject_id))}: ${arr[i].test_score} баллов</title></circle>`).join('');root.innerHTML=`<svg class="chart-svg" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" role="img" aria-label="График тестовых баллов по пробникам">${grid}<defs><linearGradient id="chartFill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#b5e477" stop-opacity=".30"/><stop offset="1" stop-color="#b5e477" stop-opacity="0"/></linearGradient></defs><path d="${area}" fill="url(#chartFill)"/><path d="${line}" fill="none" stroke="#91bf51" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>${dots}${labels}</svg>`;}
+
   function renderSubjects(){const selected=new Set(state.subjects.map(s=>Number(s.id)));$('#selected-subjects').innerHTML=state.subjects.length?state.subjects.map(s=>`<div class="subject-tile">${subjectIcon(s.name)}<div class="subject-tile-copy"><b>${escapeHTML(s.name)}</b><small>${state.exams.filter(e=>Number(e.subject_id)===Number(s.id)).length} пробников</small></div><button class="subject-tile-action remove" data-remove-subject="${s.id}">Убрать</button></div>`).join(''):'<div class="empty-small">Ты ещё не выбрал предметы.</div>';
     $('#available-subjects').innerHTML=state.availableSubjects.map(s=>{const isSelected=selected.has(Number(s.id));return `<div class="subject-tile">${subjectIcon(s.name)}<div class="subject-tile-copy"><b>${escapeHTML(s.name)}</b><small>${isSelected?'Уже в твоём списке':'Доступен для добавления'}</small></div><button class="subject-tile-action" data-add-subject="${s.id}" ${isSelected?'disabled':''}>${isSelected?'Добавлен':'＋ Добавить'}</button></div>`;}).join('');$('#exam-subject').innerHTML='<option value="">Выбери предмет</option>'+state.subjects.map(s=>`<option value="${s.id}">${escapeHTML(s.name)}</option>`).join('');}
   async function addSubject(id){try{await api('/subjects',{method:'POST',body:JSON.stringify({subject_id:Number(id)})});toast('Предмет добавлен.');await loadAll();}catch(e){toast(e.message,'error');}}

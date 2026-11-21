@@ -52,7 +52,7 @@ def create_subject(
             "subject": subject.subject_id
         }
 
-@router.patch("/subjects/{subject_id}/activate")
+@router.patch("/subjects/{subject_id}/deactivate")
 def update_subject(
         subject_id: int,
         current_user: User = Depends(get_current_user),
