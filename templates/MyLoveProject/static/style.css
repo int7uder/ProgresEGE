@@ -1,0 +1,1070 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+
+    background: #fff0f5;
+
+    font-family: sans-serif;
+
+    overflow-x: hidden;
+}
+
+
+/* ==================== */
+/* ПЕРВЫЙ ЭКРАН */
+/* ==================== */
+
+.gift {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+/* ==================== */
+/* БАНТ */
+/* ==================== */
+
+.bow {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    z-index: 10;
+
+    font-size: 100px;
+    line-height: 1;
+
+    cursor: grab;
+
+    user-select: none;
+    -webkit-user-select: none;
+
+    touch-action: none;
+
+    -webkit-tap-highlight-color: transparent;
+}
+
+.bow:active {
+    cursor: grabbing;
+}
+
+
+/* ==================== */
+/* ТРЯСКА БАНТА */
+/* ==================== */
+
+.bow.shaking {
+    animation: shake 0.12s infinite;
+}
+
+@keyframes shake {
+
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    25% {
+        transform: translate(-50%, -50%) rotate(-8deg);
+    }
+
+    50% {
+        transform: translate(-50%, -50%) rotate(8deg);
+    }
+
+    75% {
+        transform: translate(-50%, -50%) rotate(-8deg);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+}
+
+
+/* ==================== */
+/* ЦВЕТЫ И СЕРДЕЧКИ */
+/* ==================== */
+
+.flowers {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width: 0;
+    height: 0;
+
+    transform: translate(-50%, -50%);
+
+    pointer-events: none;
+
+    z-index: 5;
+}
+
+.flowers span {
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    font-size: 50px;
+
+    opacity: 0;
+
+    will-change: transform, opacity;
+}
+
+
+/* ==================== */
+/* ВЗРЫВ */
+/* ==================== */
+
+.flowers.exploding span {
+    animation: flowerExplosion 1.2s ease-out forwards;
+}
+
+@keyframes flowerExplosion {
+
+    0% {
+        opacity: 0;
+
+        transform:
+            translate(0, 0)
+            scale(0)
+            rotate(0deg);
+    }
+
+    20% {
+        opacity: 1;
+
+        transform:
+            translate(0, 0)
+            scale(1.2)
+            rotate(0deg);
+    }
+
+    100% {
+        opacity: 0;
+
+        transform:
+            translate(var(--x), var(--y))
+            scale(0.8)
+            rotate(var(--rotation));
+    }
+}
+
+
+/* ==================== */
+/* РОМАНТИЧЕСКОЕ СООБЩЕНИЕ */
+/* ==================== */
+
+.message {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 20;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+
+    opacity: 0;
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transition:
+        opacity 1s ease,
+        visibility 1s ease;
+}
+
+.message.show {
+    opacity: 1;
+    visibility: visible;
+
+    pointer-events: auto;
+}
+
+.message-card {
+    width: min(500px, 100%);
+
+    padding: 50px 35px;
+
+    text-align: center;
+
+    background: rgba(255, 255, 255, 0.9);
+
+    border-radius: 30px;
+
+    box-shadow:
+        0 20px 60px rgba(180, 80, 120, 0.2);
+
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+
+    transform: translateY(30px) scale(0.9);
+
+    transition: transform 1s ease;
+}
+
+.message.show .message-card {
+    transform: translateY(0) scale(1);
+}
+
+
+/* ==================== */
+/* СЕРДЦЕ */
+/* ==================== */
+
+.message-heart {
+    font-size: 60px;
+
+    margin-bottom: 20px;
+
+    animation: heartbeat 1.5s infinite;
+}
+
+
+/* ==================== */
+/* ТЕКСТ */
+/* ==================== */
+
+.message-card h1 {
+    margin-bottom: 15px;
+
+    color: #d94f7d;
+
+    font-size: 32px;
+}
+
+.message-card p {
+    margin-bottom: 30px;
+
+    color: #6d4a57;
+
+    font-size: 18px;
+
+    line-height: 1.6;
+}
+
+
+/* ==================== */
+/* КНОПКА */
+/* ==================== */
+
+#continueButton {
+    border: none;
+
+    padding: 14px 28px;
+
+    border-radius: 999px;
+
+    background: #e9789d;
+
+    color: white;
+
+    font-size: 16px;
+
+    cursor: pointer;
+
+    -webkit-tap-highlight-color: transparent;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+#continueButton:hover {
+    transform: scale(1.08);
+
+    box-shadow:
+        0 8px 25px rgba(217, 79, 125, 0.3);
+}
+
+#continueButton:active {
+    transform: scale(0.96);
+}
+
+
+/* ==================== */
+/* АНИМАЦИЯ СЕРДЦА */
+/* ==================== */
+
+@keyframes heartbeat {
+
+    0% {
+        transform: scale(1);
+    }
+
+    15% {
+        transform: scale(1.15);
+    }
+
+    30% {
+        transform: scale(1);
+    }
+
+    45% {
+        transform: scale(1.15);
+    }
+
+    60% {
+        transform: scale(1);
+    }
+}
+
+
+/* ==================== */
+/* ВОСПОМИНАНИЯ */
+/* ==================== */
+
+.memories {
+    height: 100vh;
+    height: 100dvh;
+
+    padding: 60px 20px;
+
+    background: #fff7fa;
+
+    text-align: center;
+
+    overflow-y: auto;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transform: translateY(50px);
+
+    transition:
+        opacity 1s ease,
+        transform 1s ease,
+        visibility 1s ease;
+}
+
+.memories.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* ==================== */
+/* ЗАГОЛОВОК */
+/* ==================== */
+
+.memories h2 {
+    margin-bottom: 50px;
+
+    color: #d94f7d;
+
+    font-size: 36px;
+}
+
+
+/* ==================== */
+/* СЕТКА ФОТО */
+/* ==================== */
+
+.photo-grid {
+    width: min(1000px, 100%);
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 30px;
+}
+
+
+/* ==================== */
+/* КАРТОЧКА ФОТО */
+/* ==================== */
+
+.photo-card {
+    padding: 12px;
+
+    background: white;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 10px 30px rgba(180, 80, 120, 0.15);
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.photo-card:hover {
+    transform:
+        translateY(-10px)
+        rotate(1deg);
+
+    box-shadow:
+        0 20px 40px rgba(180, 80, 120, 0.2);
+}
+
+
+/* ==================== */
+/* ФОТО */
+/* ==================== */
+
+.photo-card img {
+    width: 100%;
+
+    aspect-ratio: 1 / 1;
+
+    object-fit: cover;
+
+    border-radius: 15px;
+
+    display: block;
+}
+
+
+/* ==================== */
+/* ПОДПИСЬ */
+/* ==================== */
+
+.photo-card p {
+    padding: 15px 5px 8px;
+
+    color: #6d4a57;
+
+    font-size: 16px;
+
+    line-height: 1.4;
+}
+
+@media (max-width: 700px) {
+
+    .memories {
+        height: 100dvh;
+
+        padding: 50px 20px 80px;
+
+        overflow-y: auto;
+
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .memories h2 {
+        font-size: 30px;
+        margin-bottom: 35px;
+    }
+
+    .photo-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .photo-card {
+        width: 100%;
+        flex-shrink: 0;
+    }
+}
+
+.final-button {
+    grid-column: 1 / -1;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+
+    padding: 20px 0 50px;
+
+    transition:
+        opacity 0.6s ease,
+        transform 0.6s ease;
+}
+
+.final-button.hidden {
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+}
+
+#finalButton {
+    border: none;
+
+    padding: 16px 32px;
+
+    border-radius: 999px;
+
+    background: #e9789d;
+
+    color: white;
+
+    font-size: 17px;
+
+    cursor: pointer;
+
+    box-shadow: 0 8px 25px rgba(217, 79, 125, 0.2);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+#finalButton:hover {
+    transform: scale(1.08);
+
+    box-shadow: 0 10px 30px rgba(217, 79, 125, 0.3);
+}
+
+#finalButton:active {
+    transform: scale(0.95);
+}
+
+/* ==================== */
+/* ФИНАЛЬНАЯ СТРАНИЦА */
+/* ==================== */
+
+.final-page {
+    position: relative;
+
+    min-height: 100vh;
+    min-height: 100dvh;
+
+    padding: 80px 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at center,
+            #fff9fb 0%,
+            #fff0f5 100%
+        );
+
+    opacity: 0;
+    visibility: hidden;
+
+    transform: scale(0.95);
+
+    transition:
+        opacity 1s ease,
+        visibility 1s ease,
+        transform 1s ease;
+}
+
+.final-page.show {
+    opacity: 1;
+    visibility: visible;
+
+    transform: scale(1);
+}
+
+
+/* ==================== */
+/* ЦЕНТРАЛЬНЫЙ ТЕКСТ */
+/* ==================== */
+
+.final-message {
+    position: relative;
+
+    z-index: 10;
+
+    width: min(600px, 90%);
+
+    padding: 50px 40px;
+
+    text-align: center;
+
+    background: rgba(255, 255, 255, 0.82);
+
+    border-radius: 35px;
+
+    box-shadow:
+        0 20px 60px rgba(180, 80, 120, 0.15);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    opacity: 0;
+    transform: translateY(30px);
+
+    transition:
+        opacity 1s ease 0.4s,
+        transform 1s ease 0.4s;
+}
+
+.final-page.show .final-message {
+    opacity: 1;
+
+    transform: translateY(0);
+}
+
+
+/* ==================== */
+/* СЕРДЦЕ НАД ТЕКСТОМ */
+/* ==================== */
+
+.final-message-heart {
+    margin-bottom: 15px;
+
+    font-size: 60px;
+
+    animation: heartbeat 1.8s infinite;
+}
+
+
+/* ==================== */
+/* ЗАГОЛОВОК */
+/* ==================== */
+
+.final-message h1 {
+    margin-bottom: 25px;
+
+    color: #d94f7d;
+
+    font-size: 42px;
+}
+
+
+/* ==================== */
+/* ТЕКСТ */
+/* ==================== */
+
+.final-message p {
+    color: #6d4a57;
+
+    font-size: 19px;
+
+    line-height: 1.8;
+}
+
+
+/* ==================== */
+/* СЕРДЕЧКИ ПОД ТЕКСТОМ */
+/* ==================== */
+
+.final-hearts {
+    margin-top: 30px;
+
+    font-size: 25px;
+
+    letter-spacing: 8px;
+}
+
+
+/* ==================== */
+/* ФОТОГРАФИИ */
+/* ==================== */
+
+.final-photo {
+    position: absolute;
+
+    z-index: 5;
+
+    width: 150px;
+    height: 150px;
+
+    padding: 8px;
+
+    background: white;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 12px 30px rgba(180, 80, 120, 0.2);
+
+    opacity: 0;
+
+    transform: scale(0.7);
+
+    transition:
+        opacity 1s ease,
+        transform 1s ease;
+}
+
+.final-page.show .final-photo {
+    opacity: 1;
+}
+
+
+/* Фото */
+
+.final-photo img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    border-radius: 12px;
+
+    display: block;
+}
+
+
+/* ==================== */
+/* ПОЗИЦИИ ФОТО */
+/* ==================== */
+
+.photo-1 {
+    left: 8%;
+    top: 12%;
+
+    transform: rotate(-10deg) scale(0.7);
+}
+
+.photo-2 {
+    right: 8%;
+    top: 14%;
+
+    transform: rotate(9deg) scale(0.7);
+}
+
+.photo-3 {
+    left: 10%;
+    bottom: 12%;
+
+    transform: rotate(8deg) scale(0.7);
+}
+
+.photo-4 {
+    right: 10%;
+    bottom: 10%;
+
+    transform: rotate(-9deg) scale(0.7);
+}
+
+
+/* После появления */
+
+.final-page.show .photo-1 {
+    transform: rotate(-10deg) scale(1);
+}
+
+.final-page.show .photo-2 {
+    transform: rotate(9deg) scale(1);
+}
+
+.final-page.show .photo-3 {
+    transform: rotate(8deg) scale(1);
+}
+
+.final-page.show .photo-4 {
+    transform: rotate(-9deg) scale(1);
+}
+
+
+/* ==================== */
+/* СЕРДЕЧКИ ВОКРУГ */
+/* ==================== */
+
+.decor-heart {
+    position: absolute;
+
+    z-index: 3;
+
+    font-size: 30px;
+
+    opacity: 0;
+
+    animation:
+        floatingHeart 3s ease-in-out infinite;
+}
+
+.final-page.show .decor-heart {
+    opacity: 0.8;
+}
+
+
+/* Позиции */
+
+.heart-1 {
+    left: 25%;
+    top: 10%;
+
+    animation-delay: 0s;
+}
+
+.heart-2 {
+    right: 25%;
+    top: 8%;
+
+    animation-delay: 0.8s;
+}
+
+.heart-3 {
+    left: 4%;
+    top: 48%;
+
+    animation-delay: 1.2s;
+}
+
+.heart-4 {
+    right: 4%;
+    top: 45%;
+
+    animation-delay: 0.5s;
+}
+
+.heart-5 {
+    left: 30%;
+    bottom: 8%;
+
+    animation-delay: 1.5s;
+}
+
+.heart-6 {
+    right: 30%;
+    bottom: 7%;
+
+    animation-delay: 0.3s;
+}
+
+
+/* ==================== */
+/* ПЛАВАЮЩИЕ СЕРДЕЧКИ */
+/* ==================== */
+
+@keyframes floatingHeart {
+
+    0% {
+        transform: translateY(0) rotate(-5deg);
+    }
+
+    50% {
+        transform: translateY(-12px) rotate(5deg);
+    }
+
+    100% {
+        transform: translateY(0) rotate(-5deg);
+    }
+}
+
+
+/* ==================== */
+/* КНОПКА */
+/* ==================== */
+
+.final-button {
+    width: 100%;
+
+    display: flex;
+
+    justify-content: center;
+
+    padding: 20px 0 50px;
+}
+
+#finalButton {
+    border: none;
+
+    padding: 16px 32px;
+
+    border-radius: 999px;
+
+    background: #e9789d;
+
+    color: white;
+
+    font-size: 17px;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 25px rgba(217, 79, 125, 0.2);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+#finalButton:hover {
+    transform: scale(1.08);
+
+    box-shadow:
+        0 10px 30px rgba(217, 79, 125, 0.3);
+}
+
+#finalButton:active {
+    transform: scale(0.95);
+}
+
+
+/* ==================== */
+/* ТЕЛЕФОН */
+/* ==================== */
+
+@media (max-width: 700px) {
+
+    .final-page {
+        min-height: 100dvh;
+
+        padding: 40px 15px;
+
+        overflow-y: auto;
+    }
+
+    .final-message {
+        width: 90%;
+
+        padding: 40px 25px;
+
+        border-radius: 28px;
+    }
+
+    .final-message-heart {
+        font-size: 50px;
+    }
+
+    .final-message h1 {
+        font-size: 32px;
+    }
+
+    .final-message p {
+        font-size: 16px;
+
+        line-height: 1.7;
+    }
+
+    .final-photo {
+        width: 90px;
+        height: 90px;
+
+        padding: 5px;
+
+        border-radius: 12px;
+    }
+
+    .final-photo img {
+        border-radius: 8px;
+    }
+
+    .photo-1 {
+        left: 3%;
+        top: 5%;
+    }
+
+    .photo-2 {
+        right: 3%;
+        top: 5%;
+    }
+
+    .photo-3 {
+        left: 3%;
+        bottom: 5%;
+    }
+
+    .photo-4 {
+        right: 3%;
+        bottom: 5%;
+    }
+
+    .decor-heart {
+        font-size: 22px;
+    }
+
+    .heart-1 {
+        left: 25%;
+        top: 5%;
+    }
+
+    .heart-2 {
+        right: 25%;
+        top: 5%;
+    }
+
+    .heart-3 {
+        left: 5%;
+        top: 40%;
+    }
+
+    .heart-4 {
+        right: 5%;
+        top: 40%;
+    }
+
+    .heart-5 {
+        left: 25%;
+        bottom: 5%;
+    }
+
+    .heart-6 {
+        right: 25%;
+        bottom: 5%;
+    }
+}
+
+.memories.hide-content .photo-card {
+    opacity: 0;
+    transform: scale(0.8);
+    pointer-events: none;
+}
+
+.memories.hide-content .final-button {
+    opacity: 0;
+    transform: scale(0.8);
+    pointer-events: none;
+}
+
+.memories.hide-content {
+    transition:
+        opacity 0.8s ease,
+        transform 0.8s ease;
+}
+
+
+
+
+
+
+
+
+
+/**/
+
+.bow {
+    top: 70%;
+}
+
+.flowers {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.flowers {
+    position: absolute;
+
+    left: 50%;
+    top: 70%;
+
+    width: 0;
+    height: 0;
+
+    transform: translate(-50%, -50%);
+
+    pointer-events: none;
+
+    z-index: 5;
+}
+/**/
